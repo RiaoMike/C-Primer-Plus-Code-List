@@ -35,3 +35,6 @@
 *.exe
 *.out
 *.app
+
+# vscode compiler file
+.vscode/
