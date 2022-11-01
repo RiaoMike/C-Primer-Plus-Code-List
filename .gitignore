@@ -1,3 +1,8 @@
+# file without suffix
+*
+!*.*
+!*/
+
 # Prerequisites
 *.d
 
