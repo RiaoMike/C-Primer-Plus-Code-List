@@ -1,4 +1,5 @@
 #include<iostream>
+<<<<<<< HEAD
 #include<string>
 using namespace std;
 class Rui{
@@ -34,4 +35,10 @@ int main() {
 	rui.play();
 	rui.show();
 	return 0;
+=======
+using std::cout;
+using std::endl;
+int main() {
+	cout << "hello world" << endl;
+>>>>>>> 64466809b42b7b5cf6cd9d52c9aefb27c656672b
 }
