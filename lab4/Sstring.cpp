@@ -24,10 +24,10 @@ void showMenu() {
 }
 
 Sstring * Build() {
-    Sstring * ss = new Sstring;
-    ss->length = 0; 
+    Sstring * new_String = new Sstring;
+    new_String->length = 0; 
     cout << "new string has been built" << endl;
-    return ss;
+    return new_String;
 }
 
 void Display(Sstring * ss) {
@@ -88,8 +88,9 @@ void Insert(Sstring * ss) {
     int pos;
     cin >> pos;
     cout << "please enter the string you want to insert: " ;
-    cin.get();
+    // cin.get();
     char newStr[100];
+    cin.get();  // to take ENTER key
     cin.getline(newStr, 100);
     if(pos > ss->length) {
         pos = ss->length;
@@ -130,8 +131,55 @@ void Delete(Sstring * ss) {
     }
 }
 
-void Search(Sstring * ss) {
+// KMP next function with improve
+int * get_next(char * smod, int len) {
+    int i = 0, j = -1;
+    int * next = new int[len];
+    next[i] = -1;
+    while(i < len) {
+        if(j==-1 || smod[i]==smod[j]) {
+            ++i;
+            ++j;
+            if(smod[i] != smod[j]) next[i] = j;
+            else next[i] = next[j];
+        }
+        else j = next[j];
+    }
+    return next;
+}
 
+// KMP Algorithm
+// return the index of substring (begin with pos)
+// return the -1 if not found
+int Search(Sstring * ss,int pos = 0) {
+    cout << "Please enter the string you want to search: " ;
+    char subString[255];
+    cin.get();
+    cin.getline(subString, 255);
+    int subLen = 0;
+    while(subString[subLen] != '\0') {
+        subLen++;
+    }
+    int j = 0;  // substring begin with index 0 
+    int *next = get_next(subString, subLen);
+    //  cmpare while neither end
+    while(pos < ss->length && j < subLen) {
+        if(j==-1 || ss->ch[pos]==subString[j]) {
+            ++pos;
+            ++j;
+        }
+        else j = next[j];
+    }
+    int index = -1;
+    if(j == subLen) {
+        index = pos - subLen;
+        cout << "the index of subString is: " << index << endl;
+        delete[] next;
+        return index;
+    }
+    cout << "not found!" << endl;
+    delete[] next;
+    return index;
 }
 
 void Length(Sstring * ss) {
@@ -140,37 +188,36 @@ void Length(Sstring * ss) {
 
 int main() {
     cout << "build string: " << endl;
-    Sstring* ss = Build();
+    Sstring* Sstr = Build();
     int choice = 0;
     showMenu();
     cin >> choice;
     while(choice != 0) {
         switch(choice) {
             case 1:
-                Display(ss);
+                Display(Sstr);
                 break;
             case 2:
-                Change(ss);
+                Change(Sstr);
                 break;
             case 3:
-                Insert(ss);
+                Insert(Sstr);
                 break;
             case 4:
-                Delete(ss);
+                Delete(Sstr);
                 break;
             case 5:
-                Search(ss);
+                Search(Sstr);
                 break;
             case 6:
-                Length(ss);
+                Length(Sstr);
                 break;        
         }
-        // cin.get();  // pause
         system("sleep 3");
         system("clear");
         showMenu();
         cin >> choice;
     }
-    delete ss;
+    delete Sstr;
     return 0;
 }
