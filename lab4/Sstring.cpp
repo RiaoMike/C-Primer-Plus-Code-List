@@ -11,16 +11,16 @@ void showMenu() {
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     cout << "               string realise               " << endl;
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-    cout << "~~~~           1. build string          ~~~~" << endl;
-    cout << "~~~~           2. display               ~~~~" << endl;
-    cout << "~~~~           3. change                ~~~~" << endl;
-    cout << "~~~~           4. insert                ~~~~" << endl;
-    cout << "~~~~           5. delete                ~~~~" << endl;
-    cout << "~~~~           6. search                ~~~~" << endl;
-    cout << "~~~~           7. string length         ~~~~" << endl;
+    cout << "~~~~           1. display               ~~~~" << endl;
+    cout << "~~~~           2. change                ~~~~" << endl;
+    cout << "~~~~           3. insert                ~~~~" << endl;
+    cout << "~~~~           4. delete                ~~~~" << endl;
+    cout << "~~~~           5. search                ~~~~" << endl;
+    cout << "~~~~           6. string length         ~~~~" << endl;
     cout << "~~~~           0. exit                  ~~~~" << endl;
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     cout << endl;
+    cout << "Please enter your choice: " ;
 }
 
 Sstring * Build() {
@@ -50,9 +50,10 @@ void Change(Sstring * ss) {
     cin >> p >> q;
     cout << "please enter the new string: " ;
     char newStr[100];
-    cin.getline(newStr, 100);
-    if(p > q || p >= ss->length || p < 0) {
-        cout << "error input" << endl;
+    cin.get();
+    cin.get(newStr, 100);
+    if(p > q || q >= ss->length || p < 0) {
+        cout << "position input error" << endl;
     }
     else {
         int strlen = 0;
@@ -87,11 +88,14 @@ void Insert(Sstring * ss) {
     int pos;
     cin >> pos;
     cout << "please enter the string you want to insert: " ;
-    char newStr[100];
     cin.get();
-    cin.getline(newStr, 50);
+    char newStr[100];
+    cin.getline(newStr, 100);
     if(pos > ss->length) {
         pos = ss->length;
+    }
+    if(pos < 0) {
+        cout << "position input error" << endl;
     }
     else {
         int strlen = 0;
@@ -106,21 +110,67 @@ void Insert(Sstring * ss) {
             ss->ch[i + pos] = newStr[i];
         }
         ss->length += strlen;
+        cout << "insert successfully" << endl;
     }
-    cout << "insert successfully" << endl;
 }
-void Strlen(Sstring * ss) {
+
+void Delete(Sstring * ss) {
+    cout << "please enter the pos you want to begin and last: " ;
+    int p, q;
+    cin >> p >> q;
+    if(p > q || q >= ss->length || p < 0) {
+        cout << "position input error" << endl;
+    }
+    else {  // backforward
+        for(int i = q + 1; i < ss->length; i++) {
+            ss->ch[i-q-1+p] = ss->ch[i];
+        }
+        ss->length = ss->length - q - 1 + p;
+        cout << "delete successfully!" << endl;
+    }
+}
+
+void Search(Sstring * ss) {
+
+}
+
+void Length(Sstring * ss) {
     cout << "the length of the string is " << ss->length << endl;
 }
 
 int main() {
+    cout << "build string: " << endl;
+    Sstring* ss = Build();
+    int choice = 0;
     showMenu();
-    Sstring * ss = Build();
-    Strlen(ss);
-    Insert(ss);
-    Strlen(ss);
-    Display(ss);
-    Change(ss);
-    delete [] ss;
+    cin >> choice;
+    while(choice != 0) {
+        switch(choice) {
+            case 1:
+                Display(ss);
+                break;
+            case 2:
+                Change(ss);
+                break;
+            case 3:
+                Insert(ss);
+                break;
+            case 4:
+                Delete(ss);
+                break;
+            case 5:
+                Search(ss);
+                break;
+            case 6:
+                Length(ss);
+                break;        
+        }
+        // cin.get();  // pause
+        system("sleep 3");
+        system("clear");
+        showMenu();
+        cin >> choice;
+    }
+    delete ss;
     return 0;
 }
