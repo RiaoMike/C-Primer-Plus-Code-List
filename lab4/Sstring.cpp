@@ -136,7 +136,7 @@ int * get_next(char * smod, int len) {
     int i = 0, j = -1;
     int * next = new int[len];
     next[i] = -1;
-    while(i < len) {
+    while(i < len - 1) {
         if(j==-1 || smod[i]==smod[j]) {
             ++i;
             ++j;
